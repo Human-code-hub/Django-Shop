@@ -1,0 +1,33 @@
+# Базовый образ
+FROM python:3.12-slim
+
+# Убираем мусор
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# рабочая дериктория
+WORKDIR /app
+
+# Система окружения
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Создаем группу юзера
+RUN addgroup --system appuser && adduser --system --ingroup appuser appuser
+
+# Копируем зависимости и устанавливаем их
+COPY requirements.txt .
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+# Копируем проект . Создаем юзера
+COPY --chown=appuser:appuser . .
+COPY --chown=appuser:appuser entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Переключаемся на пользователя
+USER appuser
+
+ENTRYPOINT [ "/app/entrypoint.sh" ]
