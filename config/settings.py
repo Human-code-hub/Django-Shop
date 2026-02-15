@@ -132,12 +132,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # LOGOUT_REDIRECT_URL = 'user:login'
 
 
-# CSRF cookie будет передаваться только по HTTPS.
-CSRF_COOKIE_SECURE= True
+# # CSRF cookie будет передаваться только по HTTPS.
+# CSRF_COOKIE_SECURE= True
 
-# Сессионная cookie тоже будет работать только по HTTPS.
-SESSION_COOKIE_SECURE = True
+# # Сессионная cookie тоже будет работать только по HTTPS.
+# SESSION_COOKIE_SECURE = True
 
-# Автоматически перенаправляет:
-# http:// → https://
-SECURE_SSL_REDIRECT = True
+# # Автоматически перенаправляет:
+# # http:// → https://
+# SECURE_SSL_REDIRECT = True
