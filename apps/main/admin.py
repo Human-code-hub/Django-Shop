@@ -54,7 +54,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     class Media:
-        js = ("admin/js/image_preview.js")
+        js = ("admin/js/image_preview.js",)
 
     list_display = ["image_tag", "title", "slug", "category", "price", "discount", "final_price", "available", "delete_link", 'created_at', 'updated_at']
     list_filter = ["title","available","category"]
@@ -74,18 +74,35 @@ class ProductAdmin(admin.ModelAdmin):
         "created_at",
         'updated_at',
     ]
+    prepopulated_fields = {"slug": ("title",)}
 
     def main_image_preview(self, obj):
         if obj and obj.image:
             return format_html(
-                '<img class="main-image-preview" src="{}" width="120" height="150" style="border-radius:6px;">',
-                obj.image.url
+            '<img id="main-image-preview" src="{}" '
+            'style="width:120px; height:150px; '
+            'object-fit:cover; '
+            'border-radius:8px; '
+            'box-shadow:0 4px 10px rgba(0,0,0,0.25); '
+            'transition: opacity 0.3s ease; '
+            'opacity:1;">',
+            obj.image.url,
             )
-        return format_html (
-            '<img class="main-image-preview" style="display:none; border-radius:6px;"><br>'
-            '<span class="no-photo-text" style="color:#888; font-style:italic;">Нет фото</span>'
-        )
-    
+
+        return format_html(
+            '<div class="main-image-container">'
+            '<img id="main-image-preview" '
+            'style="display:none; width:120px; height:150px; '
+            'object-fit:cover; '
+            'border-radius:8px; '
+            'box-shadow:0 4px 10px rgba(0,0,0,0.25); '
+            'transition: opacity 0.3s ease; '
+            'opacity:0;">'
+            '<br><span class="no-photo-text" '
+            'style="color:#888; font-style:italic;">Нет фото</span>'
+            '</div>'
+            )
+
     def image_tag(self, obj):
         if obj.image:
             url = reverse("admin:main_product_change", args=[obj.pk])
@@ -112,7 +129,7 @@ class ProductAdmin(admin.ModelAdmin):
     delete_link.short_description = "Удалить"
 
     def final_price(self, obj):
-        final_price = obj.sell_price()
+        final_price = obj.sell_price
         if obj.discount > 0:
             return format_html (
                 '<span style="color:#d9534f; font-weight:600;"> {} грн</span>', final_price
