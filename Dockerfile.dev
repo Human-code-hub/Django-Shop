@@ -1,5 +1,5 @@
 # базовый образ
-FROM python:3.12-slim
+FROM python:3.12
 
 # Убираем мусор 
 ENV PYTHONDONTWRITEBYTECODE=1

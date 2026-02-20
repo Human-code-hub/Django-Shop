@@ -1,0 +1,100 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock  %}</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+            {# {% comment "" %}bootstarap{% endcomment %} #}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    {# yourself css  #}
+    <link rel="stylesheet" href="{% static 'style/modern-normalize.min.css' %}">
+    <link rel="stylesheet" href="{% static 'style/base.css' %}">
+</head>
+<body>
+    <header class="header sticky-top">
+        <div class="header-container d-flex ">
+            <div class="header-nav pt-4">
+                <ul class="header-list d-flex">
+                    <li>
+                        <a href="{% url 'main:popular_list' %}" class="nav-m m-3">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'main:product_list' %}" class="nav-m m-3">Shop</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="header-logo">
+                <a href="{% url 'main:product_list' %}"><img src="{% static 'images/qwewqe.png' %}" alt="..." class="heavy-logo"></a>
+            </div>
+            <div class="header-profile pt-2">
+                <div class="cart">
+                    <a href="#">
+                        <img src="{% static 'images/grob.png' %}" alt=".." class="grob">
+                        {% if cart|length > 0 %}
+                            <span class="cart-count">
+                                {{cart|length }}
+                            </span>
+                        {% endif %}
+                    </a>
+                </div>
+                {% if user.is_authenticated %}
+                    <a href="" class="m-3">Profile</a>
+                    <a href="" class="m-3">Logout</a>
+                {% else %}
+                    <a href="" class="m-3">Login</a>
+                    <a href="" class="m-3">Registration</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="Alert" aira-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="container">
+        {% block content %}
+        {% endblock content %}
+    </div>
+    <img src="{% static 'images\frame1.png' %}" alt="..." class="frame1">
+    <img src="{% static 'images\frame2.png' %}" alt="..." class="frame2">
+    <img src="{% static 'images\frame3.png' %}" alt="..." class="frame3">
+    <img src="{% static 'images\frame4.png' %}" alt="..." class="frame4">
+    <footer></footer>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    
+    {# pagination js #}
+    <script>
+        document.addEventListener("keydown", function (event) {
+            let prev = document.querySelector(".pagination a[rel='prev']");
+            let next = document.querySelector(".pagination a[rel='next']");
+
+            if(event.key === "ArrowLeft" && prev){
+                window.location.href = prev.href
+            }
+            if(event.key === "ArrowRight" && next){
+                window.location.href = next.href
+            }
+        })
+    </script>
+    {# js messages #}
+    <script>
+        document.addEventListener("DOMContentLoaded", function (){
+            const alerts = document.querySelectorAll(".alert")
+            alerts.forEach((alert) => {
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alert)
+                    bsAlert.close()
+                }, 5000)
+            })
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% extends "main/base.html" %}
+
+{% load static %}
+
+{% block title %}Shop{% endblock title %}
+
+{% block content %}
+    <div class="lists d-flex">
+        <div class="sidebar">
+            <h3>Category</h3>
+            <ul>
+                <li class="{% if not category %}disabled{% endif %}">
+                    <a href="{% url 'main:product_list' %}">All</a>
+                </li>
+                {% for c in categories %}
+                    <li class="{% if category and category.slug == c.slug %}selected{% endif %}">
+                        <a href="{{ c.get_absolute_url }}">{{ c.title}}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="main">
+            <div class="main-title">
+                {% if category %}{{ category.title }}{% else %}Product{% endif %}
+            </div>
+            <div class="product-list">
+                <div class="items">
+                    {% for product in products %}
+                        <div class="item">
+                            <a href="{{ product.get_absolute_url }}" class="home-card d-flex flex-column align-items-center text-center" >
+                                {% if product.discount %}
+                                    <span class="discount-badge">-{{product.get_discount_percent}}%</span>
+                                {% endif %}
+                                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static '' %}{% endif %}" alt="{{ product.title}}" class="main-card-image">
+                                <h3>{{ product.title }}</h3>
+                                <h5 class="{% if product.available %}text-success {% else %}text-danger{% endif %}">{{ product.available|yesno:"В наличии, Нет в наличии"}}</h5>
+                                <h5>Description: {{ product.description|linebreaks }}</h5>
+                                {% if product.discount %}
+                                    <div class="card-discount d-flex flex-column">
+                                        <p class="line">${{ product.price }}</p>
+                                        <p>${{ product.sell_price}}</p>
+                                    </div>
+                                {% else %}
+                                    <p class="price">${{ product.price}}</p>
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <ul class="pagination">
+                {# first page #}
+                <li class="{% if page_obj.number == 1 %}disabled{% endif %}">
+                    <a href="?page=1">First page</a>
+                </li>
+                {# button previous #}
+                <li class="{% if not page_obj.has_previous %}disabled{% endif %}">
+                    <a href="{% if page_obj.has_previouse %}?paga={{ page_obj.previous_page_number }}{% endif %}" rel="prev">
+                        <i class="fa fa-arrow-left"></i>
+                    </a>
+                </li>
+                {# отбражение 3 страниц #}
+                {% for page in page_obj.paginator.page_range %}
+                    {% if page >= page_obj.number|add:-2 and page <= page_obj.number|add:2 %}
+                        <li class="{% if page_obj.number == page %}active{% endif %}">
+                            <a href="?page={{ page }}">{{page}}</a>
+                        </li>
+                    {% elif page == page_obj.number|add:-3 or page == page_obj.number|add:3 %}
+                        <li class="disabled"><span>...</span></li>
+                    {% endif %}
+                {% endfor %}
+                {# next page #}
+                <li class="{% if not page_obj.has_next %}disabled{% endif %}">
+                    <a href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% endif %}" rel="next">
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                {# last page #}
+                <li class="{% if page_obj.number == page_obj.paginator.num_pages %}disabled{% endif %}">
+                    <a href="?page={{ page_obj.paginator.num_pages}}">Last</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock content %}

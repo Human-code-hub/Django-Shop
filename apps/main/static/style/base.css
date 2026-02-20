@@ -1,0 +1,113 @@
+
+:root {
+    --box-shadow: 0px 1px 1px rgba(0,0,0,0.363);
+}
+
+.header-container {
+    box-sizing: border-box;
+    max-width: 1400px;
+    margin: 0 auto;
+    justify-content: space-between;
+    padding: 0 15px;
+    align-items: center;
+}
+
+.container {
+    box-sizing: border-box;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+.frame1 {
+    position: fixed;
+    right: -0.5;
+    bottom: 64%;
+    z-index: -1;
+}
+
+.frame2 {
+    position: fixed;
+    left: -0.5;
+    bottom: 64%;
+    z-index: -1;
+}
+
+.frame3 {
+    position: fixed;
+    left: -0.3;
+    top: 76%;
+    z-index: -1;
+}
+
+.frame4 {
+    position: fixed;
+    right: -0.3;
+    top: 76%;
+    z-index: -1;
+}
+.header {
+    height: 85px;
+    background-color: #fff;
+    box-shadow: var(--box-shadow);
+}
+
+.sidebar {
+    position: static;
+    margin-top: 70px;
+    width: 220px;
+}
+.sidebar ul li {
+    font-size: 20px;
+    width: 165px;
+    height: 35px;
+    margin-bottom: 5px;
+}
+.sidebar ul li a {
+    margin-right: 15px;
+    width: 165px;
+    padding-left: 10px;
+}
+.sidebar ul {
+    margin-top: 20px;
+}
+
+
+.selected {
+    background-color: aqua;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-image: url(../images/categories-gtn.png);
+}
+
+.pagination {
+    display: flex;
+    position: fixed;
+    list-style: none;
+    left: 40%;
+    padding: 0;
+    bottom: 0px;
+    justify-content: center;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    color: #333;
+    border-radius: 5px;
+}
+
+.pagination li.disabled a {
+    color: #bbb;
+    pointer-events: none;
+    border-color: #ddd;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: white;
+    border-color: #2fff00;
+}

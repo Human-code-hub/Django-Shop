@@ -35,9 +35,9 @@ class Product(models.Model):
     category = models.ForeignKey(Category, related_name="products", on_delete=models.CASCADE)
     title = models.CharField(max_length=30, unique=True)
     slug = models.SlugField(max_length=30, unique=True, blank=True)
-    image = models.ImageField(upload_to="main", blank=True)
+    image = models.ImageField(upload_to="product/main", blank=True)
     description = models.TextField(blank=True)
-    available = models.BooleanField(default=True)
+    available = models.BooleanField(default=True, verbose_name="В наличии")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -74,7 +74,7 @@ class Product(models.Model):
     @property
     def sell_price(self):
         if self.discount:
-           return self.price - (self.price * self.discount / Decimal('100'))
+           return round(self.price - self.price / 100, 2)
         return self.price
     
     # возращает скидку 
